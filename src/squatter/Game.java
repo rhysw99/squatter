@@ -5,9 +5,12 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.ArrayList;
-import java.util.Iterator;
+import java.util.Arrays;
+import java.util.List;
 
 public class Game {
+	
+	private static int INVALID_INPUT = 1;
 	
 	private static int boardSize;
 	private static char[][] board;
@@ -26,16 +29,18 @@ public class Game {
 	public static final String W_WIN = "White";
 	public static final String NO_WIN = "None";
 	public static final String DRAW = "Draw";
+	
+	public static final List<Character> VALID_INPUT = Arrays.asList('-', '+', 'B', 'W');
 
 	public static void main(String[] args) {
 		boolean gameComplete = false;
 		try {
 			gameComplete = readBoard();
 		} catch (NumberFormatException e) {
-			// TODO Auto-generated catch block
+			System.err.println("Error reading input, incorrect value specified.");
 			e.printStackTrace();
-		} catch (IOException e) {int[] points = new int[2];
-			// TODO Auto-generated catch block
+		} catch (IOException e) {
+			System.err.println("Error reading from System.in");
 			e.printStackTrace();
 		}
 		int[] points = new int[2];
@@ -49,6 +54,7 @@ public class Game {
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		boardSize = Integer.parseInt(reader.readLine());
+		
 		board = new char[boardSize][boardSize];
 		
 		for (int row = 0; row < boardSize; row++) {
@@ -64,7 +70,10 @@ public class Game {
 			
 			for (int col = 0; col < boardSize; col++) {
 				board[row][col] = spaces[col];
-				// TODO CHECK FOR VALID INPUT.
+				if (!VALID_INPUT.contains(spaces[col])) {
+					System.err.println("Invalid input '"+spaces[col]+"', program terminating");
+					System.exit(INVALID_INPUT);
+				}
 				if (spaces[col] == CAPTURED) {
 					captureList.add(new Point(row, col));
 				} else if (spaces[col] == EMPTY) {
