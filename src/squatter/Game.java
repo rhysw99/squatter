@@ -60,11 +60,7 @@ public class Game {
 		for (int row = 0; row < boardSize; row++) {
 			String line = reader.readLine(); // Read in row of board
 			
-			line = line.replace(" ", "");  //Remove whitespace
-			/* We can read in O(n) here, perhaps find another way of loading CaptureList array?
-			 * char[] spaces = line.toCharArray(); //Convert row to char array
-			 * board[row] = spaces;
-			 */
+			line = line.replace(" ", "");
 			
 			char[] spaces = line.toCharArray();
 			
@@ -85,16 +81,15 @@ public class Game {
 	}
 	
 	public static String checkWinner(boolean gameOver, int[] points) {
-		for (int i = 0; i < captureList.size(); i++) {
-			Point p = captureList.get(i);
+		int k = captureList.size();
+		
+		while(captureList.size() > 0) {	
+			Point p = captureList.get(0);
 			if (p != null) {
-				// Check cell above current cell to determine capturer.
-				// ... this doesn't actually work.
-				// Consider the case when one player makes a loop around a loop of
-				// the other player with additional empty spaces.
 				int capturer = getPlayerFromChar(board[p.x][p.y - 1]);
 				adjacencyCheck(p, points, capturer);
 			}
+			
 		}
 		if (!gameOver) {
 			return NO_WIN;
@@ -124,6 +119,7 @@ public class Game {
 	}
 	
 	public static void adjacencyCheck(Point p, int[] points, int capturer) {
+		System.out.println("ADJ");
 		points[capturer]++;
 		captureList.remove(p);
 		
@@ -151,3 +147,6 @@ public class Game {
 	}
 
 }
+
+
+
