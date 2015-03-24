@@ -80,9 +80,7 @@ public class Game {
 			
 			char[] spaces = line.toCharArray();
 			
-			if (spaces.length < boardSize) {
-				throw new IOException(INVALID_BOARD);
-			} else if (spaces.length > boardSize) {
+			if (spaces.length != boardSize) {
 				throw new IOException(INVALID_BOARD);
 			}
 			
@@ -98,8 +96,8 @@ public class Game {
 				}
 			}			
 		}
-		String line = reader.readLine();
-		if (row < boardSize || (line != null && !line.trim().equals(""))) {
+		String line;
+		if (row < boardSize || ((line = reader.readLine()) != null && line != null && !line.trim().equals(""))) {
 			throw new IOException(INVALID_BOARD);
 		}
 		
@@ -110,9 +108,7 @@ public class Game {
 		while(captureList.size() > 0) {
 			Point p = captureList.get(0);
 			if (p != null) {
-				int capturer = getPlayerFromChar(board[p.y][p.x - 1]);
-				System.out.println("(" + p.x + ", " + p.y + ") cap == W: " + capturer);
-				
+				int capturer = getPlayerFromChar(board[p.y-1][p.x]);
 				adjacencyCheck(p, points, capturer);
 			}
 			
@@ -157,7 +153,6 @@ public class Game {
 				// Check if coordinates are in range
 				if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
 					Point newP = new Point(col, row);
-					System.out.println("		(" + newP.x + ", " + newP.y + ")");
 					if (board[row][col] == CAPTURED && captureList.contains(newP)) {
 						adjacencyCheck(newP, points, capturer);
 					}
