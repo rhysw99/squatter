@@ -53,6 +53,7 @@ public class Game {
 		System.out.println(checkWinner(gameComplete, points));
 		System.out.println(points[BLACK]);
 		System.out.println(points[WHITE]);
+		System.out.println();
 	}
 	
 	public static boolean readBoard() throws NumberFormatException, IOException {
@@ -71,6 +72,7 @@ public class Game {
 			
 			char[] spaces = line.toCharArray();
 			
+			/* change */
 			if (spaces.length < boardSize) {
 				throw new IOException(INVALID_BOARD);
 			} else if (spaces.length > boardSize) {
@@ -129,6 +131,7 @@ public class Game {
 		}
 	}
 	
+	/*
 	public static char getPlayerFromInt(int player) {
 		if (player == BLACK) {
 			return BLACK_C;
@@ -136,11 +139,11 @@ public class Game {
 			return WHITE_C;
 		}
 	}
+	*/
 	
 	public static void adjacencyCheck(Point p, int[] points, int capturer) {
 		points[capturer]++;
 		captureList.remove(p);
-		
 		for (int row = p.y - 1; row <= p.y + 1; row++) {
 			for (int col = p.x - 1; col <= p.x + 1; col++) {
 				// Check if coordinates are in range
@@ -158,7 +161,7 @@ public class Game {
 	public static void printBoard() {
 		for (int row = 0; row < boardSize; row++) {
 			for (int col = 0; col < boardSize; col++) {
-				System.out.print(board[row][col]+" ");
+				System.out.print(board[row][col] + " ");
 			}
 			System.out.println();
 		}
