@@ -53,6 +53,7 @@ public class Game {
 		System.out.println(checkWinner(gameComplete, points));
 		System.out.println(points[BLACK]);
 		System.out.println(points[WHITE]);
+		System.out.println();
 	}
 	
 	public static boolean readBoard() throws NumberFormatException, IOException {
@@ -83,7 +84,7 @@ public class Game {
 					throw new IOException("Invalid input '"+spaces[col]+"', program terminating");
 				}
 				if (spaces[col] == CAPTURED) {
-					captureList.add(new Point(row, col));
+					captureList.add(new Point(col, row));		// p.x == col    p.y == row
 				} else if (spaces[col] == EMPTY) {
 					gameFinished = false;
 				}
@@ -101,7 +102,9 @@ public class Game {
 		while(captureList.size() > 0) {
 			Point p = captureList.get(0);
 			if (p != null) {
-				int capturer = getPlayerFromChar(board[p.x][p.y - 1]);
+				int capturer = getPlayerFromChar(board[p.y][p.x - 1]);
+				System.out.println("(" + p.x + ", " + p.y + ") cap == W: " + capturer);
+				
 				adjacencyCheck(p, points, capturer);
 			}
 			
@@ -139,11 +142,14 @@ public class Game {
 		points[capturer]++;
 		captureList.remove(p);
 		
+		System.out.println("	(" + p.x + ", " + p.y + ") ");
+		
 		for (int row = p.y - 1; row <= p.y + 1; row++) {
 			for (int col = p.x - 1; col <= p.x + 1; col++) {
 				// Check if coordinates are in range
 				if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
-					Point newP = new Point(row, col);
+					Point newP = new Point(col, row);
+					System.out.println("		(" + newP.x + ", " + newP.y + ")");
 					if (board[row][col] == CAPTURED && captureList.contains(newP)) {
 						adjacencyCheck(newP, points, capturer);
 					}
@@ -156,7 +162,7 @@ public class Game {
 	public static void printBoard() {
 		for (int row = 0; row < boardSize; row++) {
 			for (int col = 0; col < boardSize; col++) {
-				System.out.print(board[row][col]+" ");
+				System.out.print(board[row][col] + " ");
 			}
 			System.out.println();
 		}
