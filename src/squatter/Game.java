@@ -1,3 +1,11 @@
+/**
+ * COMP30024 Artificial Intelligence
+ * Project A - Checking Win States
+ * ajmorton Andrew Morton 522139 
+ * rhysw    Rhys Williams ******
+ */
+
+
 package squatter;
 
 import java.awt.Point;
