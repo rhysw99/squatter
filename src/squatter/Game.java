@@ -110,6 +110,7 @@ public class Game {
 		}
 	}
 	
+	/*
 	public static char getPlayerFromInt(int player) {
 		if (player == BLACK) {
 			return BLACK_C;
@@ -117,6 +118,7 @@ public class Game {
 			return WHITE_C;
 		}
 	}
+	*/
 	
 	public static void adjacencyCheck(Point p, int[] points, int capturer) {
 		System.out.println("ADJ");
