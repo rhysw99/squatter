@@ -1,3 +1,11 @@
+/**
+ * COMP30024 Artificial Intelligence
+ * Project A - Checking Win States
+ * ajmorton Andrew Morton 522139 
+ * rhysw    Rhys Williams ******
+ */
+
+
 package squatter;
 
 import java.awt.Point;
@@ -72,10 +80,7 @@ public class Game {
 			
 			char[] spaces = line.toCharArray();
 			
-			/* change */
-			if (spaces.length < boardSize) {
-				throw new IOException(INVALID_BOARD);
-			} else if (spaces.length > boardSize) {
+			if (spaces.length != boardSize) {
 				throw new IOException(INVALID_BOARD);
 			}
 			
@@ -91,7 +96,6 @@ public class Game {
 				}
 			}
 		}
-
 		String line;
 		if (row < boardSize || ((line = reader.readLine()) != null && line != null && !line.trim().equals(""))) {
 			throw new IOException(INVALID_BOARD);
