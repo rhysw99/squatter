@@ -10,10 +10,16 @@ import java.util.List;
 
 public class Game {
 	
-	private static int INVALID_INPUT = 1;
+	/* Error constants */
+	public static int INVALID_INPUT = 1;
+	public static final String INVALID_BOARD = "Invalid board dimensions specified.";
+	public static final List<Character> VALID_INPUT = Arrays.asList('-', '+', 'B', 'W');
 	
+	/* Game variables */
 	private static int boardSize;
 	private static char[][] board;
+	
+	/* Game constants */
 	private static ArrayList<Point> captureList = new ArrayList<Point>();
 	
 	public static final char CAPTURED = '-';
@@ -22,15 +28,13 @@ public class Game {
 	public static final int BLACK = 0;
 	public static final int WHITE = 1;
 	
-	public static final int BLACK_C = 'B';
-	public static final int WHITE_C = 'W';
+	public static final char BLACK_C = 'B';
+	public static final char WHITE_C = 'W';
 	
 	public static final String B_WIN = "Black";
 	public static final String W_WIN = "White";
 	public static final String NO_WIN = "None";
 	public static final String DRAW = "Draw";
-	
-	public static final List<Character> VALID_INPUT = Arrays.asList('-', '+', 'B', 'W');
 
 	public static void main(String[] args) {
 		boolean gameComplete = false;
@@ -39,9 +43,11 @@ public class Game {
 		} catch (NumberFormatException e) {
 			System.err.println("Error reading input, incorrect value specified.");
 			e.printStackTrace();
+			System.exit(INVALID_INPUT);
 		} catch (IOException e) {
 			System.err.println("Error reading from System.in");
 			e.printStackTrace();
+			System.exit(INVALID_INPUT);
 		}
 		int[] points = new int[2];
 		System.out.println(checkWinner(gameComplete, points));
@@ -57,33 +63,42 @@ public class Game {
 		
 		board = new char[boardSize][boardSize];
 		
-		for (int row = 0; row < boardSize; row++) {
+		int row;
+		for (row = 0; row < boardSize; row++) {
 			String line = reader.readLine(); // Read in row of board
 			
 			line = line.replace(" ", "");
 			
 			char[] spaces = line.toCharArray();
 			
+			if (spaces.length < boardSize) {
+				throw new IOException(INVALID_BOARD);
+			} else if (spaces.length > boardSize) {
+				throw new IOException(INVALID_BOARD);
+			}
+			
 			for (int col = 0; col < boardSize; col++) {
 				board[row][col] = spaces[col];
 				if (!VALID_INPUT.contains(spaces[col])) {
-					System.err.println("Invalid input '"+spaces[col]+"', program terminating");
-					System.exit(INVALID_INPUT);
+					throw new IOException("Invalid input '"+spaces[col]+"', program terminating");
 				}
 				if (spaces[col] == CAPTURED) {
 					captureList.add(new Point(row, col));
 				} else if (spaces[col] == EMPTY) {
 					gameFinished = false;
 				}
-			}
+			}			
 		}
+		String line = reader.readLine();
+		if (row < boardSize || (line != null && !line.trim().equals(""))) {
+			throw new IOException(INVALID_BOARD);
+		}
+		
 		return gameFinished;
 	}
 	
 	public static String checkWinner(boolean gameOver, int[] points) {
-		int k = captureList.size();
-		
-		while(captureList.size() > 0) {	
+		while(captureList.size() > 0) {
 			Point p = captureList.get(0);
 			if (p != null) {
 				int capturer = getPlayerFromChar(board[p.x][p.y - 1]);
@@ -121,7 +136,6 @@ public class Game {
 	*/
 	
 	public static void adjacencyCheck(Point p, int[] points, int capturer) {
-		System.out.println("ADJ");
 		points[capturer]++;
 		captureList.remove(p);
 		
