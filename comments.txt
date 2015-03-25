@@ -1,6 +1,85 @@
 COMP30024 Artificial Intelligence
 Project A - Checking Board Win State
 ajmorton Andrew Morton 522139
-rhysw    Rhys WIlliams ******
+rhysw    Rhys Williams ******
 
 
+// In your comments.txt (case-sensitive) you should briefly describe the 
+// structure of the code you have implemented, any libraries you have used 
+// and any additional special comments you might want to be considered by the
+// marker. This should include a pseudocode summary of your algorithm and a
+// discussion of its time complexity.Structure of code:
+	Step 1. Read in Values		The board is read in left to right, top to bottom. 		Reads in an array of chars boardArray, a list of captured
+		cells (as Points with x and y values) called captureList
+		and sets a flag (gameFinished) if the board is not in a final
+		state 	Pseudo code		for( i = 0 ; i < n ; i++){			for(j = 0 ; j < n ; j++){				2DArray[i,j] = readInValue();				if(readInValue == ‘-’){					CaptureList.Append((i,j));				}else if(readInValue == ‘+’){					IsFinalFlag == False;				}else if(readInValue != (‘B’,’W’)){					//Throw error				}			}		}	Step 2. Iterate though CaptureList		While capturelist is not empty, run adjacencyCheck on 
+		the first element in the list (removing it from the list
+		at the same time). Due to how captureList is populated
+		the topmost, leftmost Point will be selected, prioritised
+		 as topmost then leftmost. The owner of the block of
+		captures can be determined by simply check either the 
+		square above or the square to the left (see special comments)
+	
+	Pseudo code:
+		while(captureList.size() > 0) {
+			Point p = captureList.get(0);
+				int capturer = getPlayerFromChar(board[p.y - 1][p.x]);
+				adjacencyCheck(p, points, capturer);
+			}
+			
+		}	Step 3. Run AdjacencyCheck
+		adjacencyCheck checks all adjacent squares to the input square, if the 
+		adjacent square is both a capture and not in captureList(to prevent 
+		double counting) adjacency check is run on that square and a score 
+		counter is incremented.	Pseudo code:
+		adjacencyCheck(Point square, int[] points, int capturer) {
+			points[capturer]++;
+			captureList.remove(square);
+			for (//adjacent squares) {
+				if(//square is on the board &&square is captured && in captureList)
+					adjacencyCheck(newSquare);
+				}
+			}
+		}
+			Step 4. Print results
+		First the winner is printed (dependent on the scores of the players 
+		and the gameFinished flag). Then the scores of the players are 
+		printed from the points array (points[0] is black and points[1] is white)
+
+	Pseudo code:
+
+		int black = points[0];
+		int white = points[1];
+
+		if(!gameFinished){
+			System.out.println(’None’);
+		}else if(black == white){
+			System.out.println(’Draw’);
+		}else if(black > white){
+			System.out.println(’Black’);
+		}else{
+			System.out.println(’White’);
+		}
+
+libraries used:
+	java.awt.Point;
+	java.io
+	java.util
+
+special comments:
+	Some rules of the game determined are:
+		1. Any adjacent captures (diagonally included) are owned by the same player
+		2. A captured square cannot have the non-capturing players pieces above, below, 
+		   left or right of it in a legal board state.
+		3. Moving left to right, top to bottom will always come across the topmost, 
+		   leftmost capture in a block (topmost first). As the topmost, leftmost block 
+		   it will always have the capturing players pieces both above and to the left 
+		   of it and as such can easily determine the player who captured the block.
+
+
+time complexity:
+	Ignoring the unavoidable cost of reading in the board to a 2d array (O(n^2)).
+	The algorithm used will call adjacencyCheck once for each entry in captureList 
+	(either recursively reading from captureList). As such the complexity of the algorithm
+	is O(c), where c is the number of captured squares on the board.
+
