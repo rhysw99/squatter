@@ -5,7 +5,6 @@
  * rhysw    Rhys Williams ******
  */
 
-
 package squatter;
 
 import java.awt.Point;
@@ -30,20 +29,23 @@ public class Game {
 	/* Game constants */
 	private static ArrayList<Point> captureList = new ArrayList<Point>();
 	
-	public static final char CAPTURED = '-';
-	public static final char EMPTY = '+'; 
+	public static final char CAPTURED 	= '-';
+	public static final char EMPTY 		= '+'; 
 	
-	public static final int BLACK = 0;
-	public static final int WHITE = 1;
+	public static final char BLACK_C 	= 'B';
+	public static final char WHITE_C 	= 'W';
 	
-	public static final char BLACK_C = 'B';
-	public static final char WHITE_C = 'W';
+	public static final int BLACK 		= 0;
+	public static final int WHITE 		= 1;
 	
-	public static final String B_WIN = "Black";
-	public static final String W_WIN = "White";
-	public static final String NO_WIN = "None";
-	public static final String DRAW = "Draw";
-
+	public static final String B_WIN 	= "Black";
+	public static final String W_WIN 	= "White";
+	public static final String NO_WIN 	= "None";
+	public static final String DRAW 	= "Draw";
+	
+	/**
+	 * runs the game, reading in the board, scoring the players and printing the result
+	 */
 	public static void main(String[] args) {
 		boolean gameComplete = false;
 		try {
@@ -57,13 +59,22 @@ public class Game {
 			e.printStackTrace();
 			System.exit(INVALID_INPUT);
 		}
+		
 		int[] points = new int[2];
+	
 		System.out.println(checkWinner(gameComplete, points));
 		System.out.println(points[BLACK]);
 		System.out.println(points[WHITE]);
 		System.out.println();
 	}
 	
+	/**
+	 * reads in the board to a 2d array and populates a list of captured squares to captureList.
+	 * Also sets a flag for if the board is in a final state.
+	 * @return
+	 * @throws NumberFormatException	
+	 * @throws IOException
+	 */
 	public static boolean readBoard() throws NumberFormatException, IOException {
 		boolean gameFinished = true;
 		
@@ -74,10 +85,9 @@ public class Game {
 		
 		int row;
 		for (row = 0; row < boardSize; row++) {
-			String line = reader.readLine(); // Read in row of board
+			String line = reader.readLine(); 				// Read in row of board
 			
 			line = line.replace(" ", "");
-			
 			char[] spaces = line.toCharArray();
 			
 			if (spaces.length != boardSize) {
@@ -104,13 +114,19 @@ public class Game {
 		return gameFinished;
 	}
 	
+	/**
+	 * checks for the winner of the game, returning either None, draw, black or white.
+	 * @param gameOver	if the board is in a final state (if false returns None)
+	 * @param points	an array that contains the scores for each player
+	 * @return
+	 */
 	public static String checkWinner(boolean gameOver, int[] points) {
 		for (int i = 0; i < captureList.size(); i++) {
 			Point c = captureList.get(i);
 		}
 		while(captureList.size() > 0) {
 			Point p = captureList.get(0);
-			if (p != null) {																// Is this necessary? while() should cover it
+			if (p != null) {												// Is this necessary? while() should cover it
 				int capturer = getPlayerFromChar(board[p.y - 1][p.x]);
 				adjacencyCheck(p, points, capturer);
 			}
@@ -126,7 +142,13 @@ public class Game {
 			return W_WIN;
 		}
 	}
-	
+
+	/**
+	 * takes in a char value ('B' or 'W') and converts them 
+	 * to an integer values, 0 for black and 1 for white
+	 * @param player	a char that is either 'B' or 'W'
+	 * @return
+	 */
 	public static int getPlayerFromChar(char player) {
 		if (player == BLACK_C) {
 			return BLACK;
@@ -144,7 +166,13 @@ public class Game {
 		}
 	}
 	*/
-	
+	/**
+	 * runs recursively, checking all adjacent squares and if the squares are both captured and not in captureList then
+	 * adjacencyCheck is run recursively on the new square.
+	 * @param p			contains the coordinates of a captured square
+	 * @param points	a scoreboard for the players, [0] for black and [1] for white
+	 * @param capturer	the index of the points array corresponding the capturing player
+	 */
 	public static void adjacencyCheck(Point p, int[] points, int capturer) {
 		points[capturer]++;
 		captureList.remove(p);
@@ -161,7 +189,7 @@ public class Game {
 			
 		}
 	}
-	
+/*	
 	public static void printBoard() {
 		for (int row = 0; row < boardSize; row++) {
 			for (int col = 0; col < boardSize; col++) {
@@ -170,8 +198,7 @@ public class Game {
 			System.out.println();
 		}
 	}
-
+*/
 }
-
 
 
