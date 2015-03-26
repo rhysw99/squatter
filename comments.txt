@@ -1,36 +1,25 @@
-update****
-
 COMP30024 Artificial Intelligence
 Project A - Checking Board Win State
 ajmorton Andrew Morton 522139
 rhysw    Rhys Williams 661561
 
-
-// In your comments.txt (case-sensitive) you should briefly describe the 
-// structure of the code you have implemented, any libraries you have used 
-// and any additional special comments you might want to be considered by the
-// marker. This should include a pseudocode summary of your algorithm and a
-// discussion of its time complexity.
-
 Structure of code:
 	Step 1. Read in Values
 		The board is read in left to right, top to bottom. 
-		Reads in an array of chars boardArray, a list of captured
-		cells (as Points with x and y values) called captureList
+		Reads in an array of chars (board), a list of captured
+		cells (as Points with x and y values) called 'captureList'
 		and sets a flag (gameFinished) if the board is not in a final
 		state 
 
 	Pseudo code
-		for( i = 0 ; i < n ; i++){
-			for(j = 0 ; j < n ; j++){
-				2DArray[i,j] = readInValue();
-				if(readInValue == '-'){
-					CaptureList.Append((i,j));
-				}else if(readInValue == '+'){
-					IsFinalFlag == False;
-				}else if(readInValue != ('B','W')){
-					//Throw error
-				}
+		for (each cell on board) {
+			board[i,j] = readInValue();
+			if(readInValue == '-'){
+				CaptureList.Append((i,j));
+			} else if(readInValue == '+'){
+				IsFinalFlag == False;
+			} else if(readInValue != ('B','W')){
+				//Throw error
 			}
 		}
 
@@ -41,7 +30,7 @@ Structure of code:
 		the topmost, leftmost Point will be selected, prioritised
 		 as topmost then leftmost. The owner of the block of
 		captures can be determined by simply check either the 
-		square above or the square to the left (see special comments)
+		cell above or the cell to the left (see special comments)
 	
 	Pseudo code:
 		while(captureList.size() > 0) {
@@ -54,18 +43,21 @@ Structure of code:
 
 
 	Step 3. Run AdjacencyCheck
-		adjacencyCheck checks all adjacent squares to the input square, if the 
-		adjacent square is both a capture and not in captureList(to prevent 
-		double counting) adjacency check is run on that square and a score 
-		counter is incremented.
+		adjacencyCheck checks all adjacent cells to the input cell, if the 
+		adjacent cell is both a captured cell and not in captureList(to prevent
+		double counting) adjacency check is run on that cell and a score 
+		counter is incremented.  Capturer refers to the player which has
+		captured the cell, and scores is an array to keep track of the number
+		of captured cells.
 
 	Pseudo code:
-		adjacencyCheck(Point square, int[] points, int capturer) {
-			points[capturer]++;
-			captureList.remove(square);
-			for (//adjacent squares) {
-				if(//square is on the board &&square is captured && in captureList)
-					adjacencyCheck(newSquare);
+		adjacencyCheck(cell, scores, capturer) {
+			scores[capturer]++;
+			captureList.remove(cell);
+			for (All adjacent cells) {
+				if(cell is on the board && cell is captured &&
+						cell in captureList)
+					adjacencyCheck(new cell);
 				}
 			}
 		}
@@ -73,46 +65,42 @@ Structure of code:
 	Step 4. Print results
 		First the winner is printed (dependent on the scores of the players 
 		and the gameFinished flag). Then the scores of the players are 
-		printed from the points array (points[0] is black and points[1] is white)
+		printed from the points array (scores[0] is black and scores[1] is white)
 
 	Pseudo code:
-
-		int black = points[0];
-		int white = points[1];
-
 		if(!gameFinished){
 			System.out.println('None');
-		}else if(black == white){
+		}else if(scores[BLACK] == scores[WHITE]){
 			System.out.println('Draw');
-		}else if(black > white){
+		}else if(scores[BLACK] > scores[WHITE]){
 			System.out.println('Black');
 		}else{
 			System.out.println('White');
 		}
 
 
-
-libraries used:
-	java.awt.Point;
-	java.io
-	java.util
-
 special comments:
 	Some rules of the game determined are:
 		1. Any adjacent captures (diagonally included) are owned by the same player
 
-		2. A captured square cannot have the non-capturing players pieces above, below, 
+		2. A captured cell cannot have the non-capturing players pieces above, below, 
 		   left or right of it in a legal board state.
 
 		3. Moving left to right, top to bottom will always come across the topmost, 
 		   leftmost capture in a block (topmost first). As the topmost, leftmost block 
 		   it will always have the capturing players pieces both above and to the left 
 		   of it and as such can easily determine the player who captured the block.
+		   
+		4. Ideally the captureList would be defined in the checkWinner function and be
+		   passed to the adjacencyCheck function as required, however in Part A due to
+		   the need for the board to be read in it was much simpler to define it as a
+		   class variable.  However in Part B the captureList definition would be moved
+		   to within the scope of the checkWinner function.
 
 
 time complexity:
 	Ignoring the unavoidable cost of reading in the board to a 2d array (O(n^2)).
 	The algorithm used will call adjacencyCheck once for each entry in captureList 
 	(either recursively or reading in from captureList). As such the complexity of the algorithm
-	is O(c), where c is the number of captured squares on the board.
+	is O(c), where c is the number of captured cells on the board.
 
