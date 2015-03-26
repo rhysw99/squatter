@@ -32,8 +32,8 @@ public class Game {
 	public static final char CAPTURED 	= '-';
 	public static final char EMPTY 		= '+'; 
 	
-	public static final char BLACK_C 	= 'B';				// black player token
-	public static final char WHITE_C 	= 'W';				// white player token
+	public static final char BLACK_C 	= 'B';				// black player char token
+	public static final char WHITE_C 	= 'W';				// white player char token
 	
 	public static final int BLACK 		= 0;				// black player index in scoreboard
 	public static final int WHITE 		= 1;				// white player index in scoreboard
