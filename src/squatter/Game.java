@@ -64,8 +64,9 @@ public class Game {
 		int[] points = new int[2];									// scoreboard for the game
 	
 		System.out.println(checkWinner(gameComplete, points));
-		System.out.println(points[BLACK]);
 		System.out.println(points[WHITE]);
+		System.out.println(points[BLACK]);
+		
 	}
 	
 	/**
