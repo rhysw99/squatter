@@ -122,6 +122,7 @@ public class Game {
 	 * @return A string corresponding the winner of the game
 	 */
 	public static String checkWinner(boolean gameOver, int[] points) {
+		
 		while(captureList.size() > 0) {
 			Point p = captureList.get(0);
 			if (p != null) {
