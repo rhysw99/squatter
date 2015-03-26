@@ -1,5 +1,3 @@
-update****
-
 COMP30024 Artificial Intelligence
 Project A - Checking Board Win State
 ajmorton Andrew Morton 522139
