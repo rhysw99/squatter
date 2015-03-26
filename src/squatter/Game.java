@@ -2,7 +2,7 @@
  * COMP30024 Artificial Intelligence
  * Project A - Checking Win States
  * ajmorton Andrew Morton 522139 
- * rhysw    Rhys Williams ******
+ * rhysw    Rhys Williams 661561
  */
 
 package squatter;
@@ -32,12 +32,13 @@ public class Game {
 	public static final char CAPTURED 	= '-';
 	public static final char EMPTY 		= '+'; 
 	
-	public static final char BLACK_C 	= 'B';
-	public static final char WHITE_C 	= 'W';
+	public static final char BLACK_C 	= 'B';				// black player token
+	public static final char WHITE_C 	= 'W';				// white player token
 	
-	public static final int BLACK 		= 0;
-	public static final int WHITE 		= 1;
+	public static final int BLACK 		= 0;				// black player index in scoreboard
+	public static final int WHITE 		= 1;				// white player index in scoreboard
 	
+	/* Print winner strings */
 	public static final String B_WIN 	= "Black";
 	public static final String W_WIN 	= "White";
 	public static final String NO_WIN 	= "None";
@@ -60,12 +61,11 @@ public class Game {
 			System.exit(INVALID_INPUT);
 		}
 		
-		int[] points = new int[2];
+		int[] points = new int[2];									// scoreboard for the game
 	
 		System.out.println(checkWinner(gameComplete, points));
 		System.out.println(points[BLACK]);
 		System.out.println(points[WHITE]);
-		System.out.println();
 	}
 	
 	/**
@@ -96,12 +96,12 @@ public class Game {
 			
 			for (int col = 0; col < boardSize; col++) {
 				board[row][col] = spaces[col];
-				if (!VALID_INPUT.contains(spaces[col])) {
+				if (!VALID_INPUT.contains(spaces[col])) {	// check for legal char characters
 					throw new IOException("Invalid input '"+spaces[col]+"', program terminating");
 				}
-				if (spaces[col] == CAPTURED) {
+				if (spaces[col] == CAPTURED) {				// check for captured squares
 					captureList.add(new Point(col, row));
-				} else if (spaces[col] == EMPTY) {
+				} else if (spaces[col] == EMPTY) {			// check for final board state
 					gameFinished = false;
 				}
 			}
@@ -115,30 +115,27 @@ public class Game {
 	}
 	
 	/**
-	 * checks for the winner of the game, returning either None, draw, black or white.
+	 * checks for the winner of the game, returning strings None, Draw, Black or White.
 	 * @param gameOver	if the board is in a final state (if false returns None)
 	 * @param points	an array that contains the scores for each player
 	 * @return
 	 */
 	public static String checkWinner(boolean gameOver, int[] points) {
-		for (int i = 0; i < captureList.size(); i++) {
-			Point c = captureList.get(i);
-		}
 		while(captureList.size() > 0) {
 			Point p = captureList.get(0);
-			if (p != null) {																// Is this necessary? while() should cover it
+			if (p != null) {
 				int capturer = getPlayerFromChar(board[p.y - 1][p.x]);
 				adjacencyCheck(p, points, capturer);
 			}
 			
 		}
-		if (!gameOver) {
+		if (!gameOver) {								// not final board state
 			return NO_WIN;
-		} else if (points[BLACK] == points[WHITE]) {
+		} else if (points[BLACK] == points[WHITE]) {	// draw
 			return DRAW;
-		} else if (points[BLACK] > points[WHITE]) {
+		} else if (points[BLACK] > points[WHITE]) {		// black wins
 			return B_WIN;
-		} else {
+		} else {										// white wins
 			return W_WIN;
 		}
 	}
@@ -157,15 +154,6 @@ public class Game {
 		}
 	}
 	
-	/*
-	public static char getPlayerFromInt(int player) {
-		if (player == BLACK) {
-			return BLACK_C;
-		} else {
-			return WHITE_C;
-		}
-	}
-	*/
 	/**
 	 * runs recursively, checking all adjacent squares and if the squares are both captured and not in captureList then
 	 * adjacencyCheck is run recursively on the new square.
@@ -181,6 +169,7 @@ public class Game {
 				// Check if coordinates are in range
 				if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
 					Point newP = new Point(col, row);
+					// check if new square is both a capture and not previously counted
 					if (board[row][col] == CAPTURED && captureList.contains(newP)) {
 						adjacencyCheck(newP, points, capturer);
 					}
@@ -189,6 +178,8 @@ public class Game {
 			
 		}
 	}
+
+	
 /*	
 	public static void printBoard() {
 		for (int row = 0; row < boardSize; row++) {

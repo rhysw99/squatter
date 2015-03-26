@@ -1,7 +1,7 @@
 COMP30024 Artificial Intelligence
 Project A - Checking Board Win State
 ajmorton Andrew Morton 522139
-rhysw    Rhys Williams ******
+rhysw    Rhys Williams 661561
 
 
 // In your comments.txt (case-sensitive) you should briefly describe the 
