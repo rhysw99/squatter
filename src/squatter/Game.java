@@ -126,7 +126,7 @@ public class Game {
 		}
 		while(captureList.size() > 0) {
 			Point p = captureList.get(0);
-			if (p != null) {												// Is this necessary? while() should cover it
+			if (p != null) {																// Is this necessary? while() should cover it
 				int capturer = getPlayerFromChar(board[p.y - 1][p.x]);
 				adjacencyCheck(p, points, capturer);
 			}
