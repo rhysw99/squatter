@@ -24,7 +24,7 @@ public class Game {
 	
 	/* Game variables */
 	private static int boardSize;
-	private static char[][] board;
+	private static Board board;
 	
 	/* Game constants */
 	private static ArrayList<Point> captureList = new ArrayList<Point>();
@@ -43,6 +43,7 @@ public class Game {
 	public static final String W_WIN 	= "White";
 	public static final String NO_WIN 	= "None";
 	public static final String DRAW 	= "Draw";
+	
 	
 	/**
 	 * runs the game, reading in the board, scoring the players and printing the result
@@ -66,7 +67,6 @@ public class Game {
 		System.out.println(checkWinner(gameComplete, points));
 		System.out.println(points[WHITE]);
 		System.out.println(points[BLACK]);
-		
 	}
 	
 	/**
@@ -82,7 +82,7 @@ public class Game {
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
 		boardSize = Integer.parseInt(reader.readLine());
 		
-		board = new char[boardSize][boardSize];
+		board = new Board(boardSize);
 		
 		int row;
 		for (row = 0; row < boardSize; row++) {
@@ -96,10 +96,12 @@ public class Game {
 			}
 			
 			for (int col = 0; col < boardSize; col++) {
-				board[row][col] = spaces[col];
 				if (!VALID_INPUT.contains(spaces[col])) {	// check for legal char characters
 					throw new IOException("Invalid input '"+spaces[col]+"', program terminating");
 				}
+				Point newP = new Point(col, row);
+				board.setCell(newP, new Cell(newP, spaces[col]));
+				
 				if (spaces[col] == CAPTURED) {				// check for captured squares
 					captureList.add(new Point(col, row));
 				} else if (spaces[col] == EMPTY) {			// check for final board state
@@ -122,11 +124,11 @@ public class Game {
 	 * @return
 	 */
 	public static String checkWinner(boolean gameOver, int[] points) {
-		
 		while(captureList.size() > 0) {
 			Point p = captureList.get(0);
 			if (p != null) {
-				int capturer = getPlayerFromChar(board[p.y - 1][p.x]);
+				Point ownerPosition = new Point(p.x, p.y - 1);
+				int capturer = getPlayerFromChar(board.getCell(ownerPosition).getOwner());
 				adjacencyCheck(p, points, capturer);
 			}
 			
@@ -172,7 +174,7 @@ public class Game {
 				if (row >= 0 && row < boardSize && col >= 0 && col < boardSize) {
 					Point newP = new Point(col, row);
 					// check if new square is both a capture and not previously counted
-					if (board[row][col] == CAPTURED && captureList.contains(newP)) {
+					if (board.getCell(newP).getOwner() == CAPTURED && captureList.contains(newP)) {
 						adjacencyCheck(newP, points, capturer);
 					}
 				}
@@ -181,17 +183,6 @@ public class Game {
 		}
 	}
 
-	
-/*	
-	public static void printBoard() {
-		for (int row = 0; row < boardSize; row++) {
-			for (int col = 0; col < boardSize; col++) {
-				System.out.print(board[row][col] + " ");
-			}
-			System.out.println();
-		}
-	}
-*/
 }
 
 
