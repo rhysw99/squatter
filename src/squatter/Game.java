@@ -72,7 +72,7 @@ public class Game {
 	/**
 	 * reads in the board to a 2d array and populates a list of captured squares to captureList.
 	 * Also sets a flag for if the board is in a final state.
-	 * @return
+	 * @return the flag gameFinished which determines if board is in a fnal state
 	 * @throws NumberFormatException	
 	 * @throws IOException
 	 */
@@ -121,7 +121,7 @@ public class Game {
 	 * checks for the winner of the game, returning strings None, Draw, Black or White.
 	 * @param gameOver	if the board is in a final state (if false returns None)
 	 * @param points	an array that contains the scores for each player
-	 * @return
+	 * @return A string corresponding the winner of the game
 	 */
 	public static String checkWinner(boolean gameOver, int[] points) {
 		while(captureList.size() > 0) {
@@ -148,7 +148,7 @@ public class Game {
 	 * takes in a char value ('B' or 'W') and converts them 
 	 * to an integer values, 0 for black and 1 for white
 	 * @param player	a char that is either 'B' or 'W'
-	 * @return
+	 * @return the index of the player (determined by the char player) in scores[]
 	 */
 	public static int getPlayerFromChar(char player) {
 		if (player == BLACK_C) {
