@@ -17,17 +17,15 @@ import java.util.List;
 
 public class Game {
 	
-	/* Error constants */
-	public static int INVALID_INPUT = 1;
-	public static final String INVALID_BOARD = "Invalid board dimensions specified.";
-	public static final List<Character> VALID_INPUT = Arrays.asList('-', '+', 'B', 'W');
-	
 	/* Game variables */
-	private static int boardSize;
-	private static Board board;
+	private int boardSize;
+	private Board board;
+	private boolean gameComplete;
+	private int[] points;
+	private ArrayList<Point> captureList = new ArrayList<Point>();
 	
 	/* Game constants */
-	private static ArrayList<Point> captureList = new ArrayList<Point>();
+	public static final int DEFAULT_SIZE = 5;
 	
 	public static final char CAPTURED 	= '-';
 	public static final char EMPTY 		= '+'; 
@@ -44,12 +42,37 @@ public class Game {
 	public static final String NO_WIN 	= "None";
 	public static final String DRAW 	= "Draw";
 	
+	/* Error constants */
+	public static int INVALID_INPUT = 1;
+	public static final String INVALID_BOARD = "Invalid board dimensions specified.";
+	public static final List<Character> VALID_INPUT = Arrays.asList('-', '+', 'B', 'W');
+	
 	
 	/**
-	 * runs the game, reading in the board, scoring the players and printing the result
+	 * 	Initialises the game object.
+	 * 	Calls other constructor which initialises a board with default size
 	 */
-	public static void main(String[] args) {
-		boolean gameComplete = false;
+	public Game() {
+		this(DEFAULT_SIZE); // Create a new board with default size 5
+	}
+	
+	/** 
+	 * Initialise the game object with a specified board size
+	 * @param size Size of the playing board
+	 * For the purposes of the testing case, this constructor is unnecessary, as the board object
+	 * will be reassigned when reading in from the test files.
+	 */
+	public Game(int size) {
+		board = new Board(size);
+		gameComplete = false;
+		points = new int[2]; // Scoreboard for the game
+	}
+	
+	/**
+	 * This method is temporary and is used to read in from the provided data file and check the board
+	 * for the winner in order to test the algorithm.
+	 */
+	public void testWinnerAlgorithm() {
 		try {
 			gameComplete = readBoard();
 		} catch (NumberFormatException e) {
@@ -61,22 +84,20 @@ public class Game {
 			e.printStackTrace();
 			System.exit(INVALID_INPUT);
 		}
-		
-		int[] points = new int[2];									// scoreboard for the game
 	
-		System.out.println(checkWinner(gameComplete, points));
+		System.out.println(checkWinner());
 		System.out.println(points[WHITE]);
 		System.out.println(points[BLACK]);
 	}
-	
+
 	/**
-	 * reads in the board to a 2d array and populates a list of captured squares to captureList.
+	 * Reads in the board to a 2d array and populates a list of captured squares to captureList.
 	 * Also sets a flag for if the board is in a final state.
-	 * @return the flag gameFinished which determines if board is in a fnal state
-	 * @throws NumberFormatException	
+	 * @return The flag gameFinished which determines if board is in a final state
+	 * @throws NumberFormatException
 	 * @throws IOException
 	 */
-	public static boolean readBoard() throws NumberFormatException, IOException {
+	public boolean readBoard() throws NumberFormatException, IOException {
 		boolean gameFinished = true;
 		
 		BufferedReader reader = new BufferedReader(new InputStreamReader(System.in));
@@ -118,22 +139,22 @@ public class Game {
 	}
 	
 	/**
-	 * checks for the winner of the game, returning strings None, Draw, Black or White.
-	 * @param gameOver	if the board is in a final state (if false returns None)
-	 * @param points	an array that contains the scores for each player
+	 * Checks for the winner of the game, returning strings None, Draw, Black or White.
+	 * @param gameOver	If the board is in a final state (if false returns None)
+	 * @param points	An array that contains the scores for each player
 	 * @return A string corresponding the winner of the game
 	 */
-	public static String checkWinner(boolean gameOver, int[] points) {
+	public String checkWinner() {
 		while(captureList.size() > 0) {
 			Point p = captureList.get(0);
 			if (p != null) {
 				Point ownerPosition = new Point(p.x, p.y - 1);
 				int capturer = getPlayerFromChar(board.getCell(ownerPosition).getOwner());
-				adjacencyCheck(p, points, capturer);
+				adjacencyCheck(p, capturer);
 			}
 			
 		}
-		if (!gameOver) {								// not final board state
+		if (!gameComplete) {								// not final board state
 			return NO_WIN;
 		} else if (points[BLACK] == points[WHITE]) {	// draw
 			return DRAW;
@@ -145,12 +166,12 @@ public class Game {
 	}
 
 	/**
-	 * takes in a char value ('B' or 'W') and converts them 
+	 * Takes in a char value ('B' or 'W') and converts them 
 	 * to an integer values, 0 for black and 1 for white
-	 * @param player	a char that is either 'B' or 'W'
-	 * @return the index of the player (determined by the char player) in scores[]
+	 * @param player A char that is either 'B' or 'W'
+	 * @return The index of the player (determined by the char player) in scores[]
 	 */
-	public static int getPlayerFromChar(char player) {
+	public int getPlayerFromChar(char player) {
 		if (player == BLACK_C) {
 			return BLACK;
 		} else {
@@ -159,13 +180,13 @@ public class Game {
 	}
 	
 	/**
-	 * runs recursively, checking all adjacent squares and if the squares are both captured and not in captureList then
+	 * Runs recursively, checking all adjacent squares and if the squares are both captured and not in captureList then
 	 * adjacencyCheck is run recursively on the new square.
-	 * @param p			contains the coordinates of a captured square
-	 * @param points	a scoreboard for the players, [0] for black and [1] for white
-	 * @param capturer	the index of the points array corresponding the capturing player
+	 * @param p			Contains the coordinates of a captured square
+	 * @param points	A scoreboard for the players, [0] for black and [1] for white
+	 * @param capturer	The index of the points array corresponding the capturing player
 	 */
-	public static void adjacencyCheck(Point p, int[] points, int capturer) {
+	public void adjacencyCheck(Point p, int capturer) {
 		points[capturer]++;
 		captureList.remove(p);
 		for (int row = p.y - 1; row <= p.y + 1; row++) {
@@ -175,7 +196,7 @@ public class Game {
 					Point newP = new Point(col, row);
 					// check if new square is both a capture and not previously counted
 					if (board.getCell(newP).getOwner() == CAPTURED && captureList.contains(newP)) {
-						adjacencyCheck(newP, points, capturer);
+						adjacencyCheck(newP, capturer);
 					}
 				}
 			}
