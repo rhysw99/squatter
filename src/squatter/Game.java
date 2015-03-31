@@ -58,7 +58,7 @@ public class Game {
 	
 	/** 
 	 * Initialise the game object with a specified board size
-	 * @param size Size of the playing board
+	 * @param size	Size of the playing board
 	 * For the purposes of the testing case, this constructor is unnecessary, as the board object
 	 * will be reassigned when reading in from the test files.
 	 */
@@ -141,7 +141,6 @@ public class Game {
 	/**
 	 * Checks for the winner of the game, returning strings None, Draw, Black or White.
 	 * @param gameOver	If the board is in a final state (if false returns None)
-	 * @param points	An array that contains the scores for each player
 	 * @return A string corresponding the winner of the game
 	 */
 	public String checkWinner() {
@@ -183,7 +182,6 @@ public class Game {
 	 * Runs recursively, checking all adjacent squares and if the squares are both captured and not in captureList then
 	 * adjacencyCheck is run recursively on the new square.
 	 * @param p			Contains the coordinates of a captured square
-	 * @param points	A scoreboard for the players, [0] for black and [1] for white
 	 * @param capturer	The index of the points array corresponding the capturing player
 	 */
 	public void adjacencyCheck(Point p, int capturer) {
