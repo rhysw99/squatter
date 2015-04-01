@@ -27,10 +27,10 @@ Structure of code:
 		While capturelist is not empty, run adjacencyCheck on 
 		the first element in the list (removing it from the list
 		at the same time). Due to how captureList is populated
-		the topmost, leftmost cell on the board will be selected, 
-		prioritised as topmost then leftmost. The owner of the block of
-		captures can be determined by simply checking either the 
-		cell above or the cell to the left (see special comments)
+		the topmost, leftmost cell on the board will be selected.
+		The owner of the block of captures can be determined by simply
+		checking either the cell above or the cell to the left
+		(see special comments)
 	
 	Pseudo code:
 		while(captureList.size() > 0) {
@@ -70,16 +70,16 @@ Structure of code:
 	Pseudo code:
 		if(!gameFinished){
 			System.out.println('None');
-		}else if(scores[BLACK] == scores[WHITE]){
+		} else if(scores[BLACK] == scores[WHITE]){
 			System.out.println('Draw');
-		}else if(scores[BLACK] > scores[WHITE]){
+		} else if(scores[BLACK] > scores[WHITE]){
 			System.out.println('Black');
-		}else{
+		} else{
 			System.out.println('White');
 		}
 
 
-special comments:
+Special comments:
 	Some rules of the game determined are:
 		1. Any adjacent captures (diagonals included) are owned by the same player
 
@@ -98,13 +98,13 @@ special comments:
 		   to within the scope of the checkWinner function.
 
 
-time complexity:
-	Ignoring the unavoidable cost of reading in the board to populate the 2D array and captureList ( O(n^2) ),
+Time complexity:
+	Ignoring the unavoidable cost of reading in the board to populate the 2D array and captureList [O(n^2)],
 	the algorithm used will call adjacencyCheck once for each entry in captureList 
 	(either recursively or reading in from captureList). As such the complexity of the algorithm
 	is O(c), where c is the number of captured cells on the board. 
 	
 	This is likely the fastest algorithm that can be utilised as it calls each captured cell only once and 
 	determines the capturing player only once per block of captures. Any fewer calls would not provide the
-	bare minimum amount of information required to properly score the game
+	bare minimum amount of information required to properly score the game.
 

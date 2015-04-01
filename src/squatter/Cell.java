@@ -4,7 +4,6 @@ import java.awt.Point;
 
 public class Cell {
 	
-	
 	private char owner;					// the owner of the cell ('B', 'W', '+', '-')
 	private Point p;					// the x and y coordinates of the cell (as a Point)
 	
@@ -16,9 +15,16 @@ public class Cell {
 	}
 	
 	/* SETTERS */
-	public void setOwner(char owner)	{ this.owner = owner; }	
+	public void setOwner(char owner) {
+		this.owner = owner;
+	}	
 	
 	/* GETTERS */
-	public char getOwner()				{ return this.owner; }
-	public Point getPosition() 			{ return p; }
+	public char getOwner() {
+		return this.owner;
+	}
+	
+	public Point getPosition() {
+		return p;
+	}
 }

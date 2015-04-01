@@ -3,7 +3,6 @@ package squatter;
 import java.awt.Point;
 
 
-
 public class Board {
 	
 	private Cell[][] board;					// a 2D array of Cells, represents the game board
